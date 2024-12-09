@@ -1,0 +1,304 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body {
+  background: #121212;
+}
+
+.coin-bg {
+  background-image: url('/backgrounds/coins-bg.png');
+  background-size: cover;
+  /* Ensures the image covers the entire element */
+  background-position: center;
+  /* Centers the image within the element */
+  background-repeat: no-repeat;
+  /* Prevents the image from repeating */
+  height: 100%;
+  /* Full height */
+  width: 100%;
+  /* Full width */
+  position: relative;
+  /* Allows positioning of child elements */
+}
+
+.rule-bg-2 {
+  background-image: url('/backgrounds/rule-bg.png');
+  background-size: cover;
+  /* Ensures the image covers the entire element */
+  background-position: center;
+  /* Centers the image within the element */
+  background-repeat: no-repeat;
+  /* Prevents the image from repeating */
+  min-height: 100vh;
+  position: relative;
+  /* Allows positioning of child elements */
+}
+
+
+.scratch-card-bg {
+  background-image: url('/backgrounds/scratch-card-bg.png');
+  background-size: cover;
+  /* Ensures the image covers the entire element */
+  background-position: center;
+  /* Centers the image within the element */
+  background-repeat: no-repeat;
+  /* Prevents the image from repeating */
+  min-height: 100vh;
+  position: relative;
+  /* Allows positioning of child elements */
+}
+
+
+
+.green-gradient-bg {
+  background: rgb(8, 14, 19);
+  background: linear-gradient(347deg, rgba(8, 14, 19, 1) 39%, rgba(11, 58, 36, 1) 96%);
+  /* width: 100vw; */
+  height: 100vh;
+}
+
+.create-wallet-card-gradient {
+  border-image-slice: 1;
+  background: radial-gradient(90.61% 143.69% at 29.2% 35.35%, rgba(165, 239, 255, 0.2) 0%, rgba(110, 191, 244, 0.0447917) 77.08%, rgba(70, 144, 213, 0) 100%) !important;
+}
+
+.create-wallet-card-gradient-outer {
+  background: radial-gradient(104.01% 282.59% at -2.09% 0%, #A0FF98 0%, rgba(255, 255, 255, 0) 100%) !important;
+}
+
+.bg-gradient-wallet-btn {
+  background: radial-gradient(90.16% 143.01% at 15.32% 21.04%, rgba(165, 239, 255, 0.2) 0%, rgba(110, 191, 244, 0.0447917) 77.08%, rgba(70, 144, 213, 0) 100%)
+}
+
+.coin-card-bg {
+  background: radial-gradient(90.61% 143.69% at 29.2% 35.35%, rgba(165, 239, 255, 0.2) 0%, rgba(110, 191, 244, 0.0447917) 77.08%, rgba(70, 144, 213, 0) 100%);
+}
+
+.box {
+  --b: 1px;
+  /* thickness of the border */
+  --c: #CEFFCD;
+  /* color of the border */
+  --w: 10px;
+  /* width of border */
+
+
+  border: var(--b) solid #0000;
+  /* space for the border */
+  --_g: #0000 90deg, var(--c) 0;
+  --_p: var(--w) var(--w) border-box no-repeat;
+  background:
+    conic-gradient(from 90deg at top var(--b) left var(--b), var(--_g)) 0 0 / var(--_p),
+    conic-gradient(from 180deg at top var(--b) right var(--b), var(--_g)) 100% 0 / var(--_p),
+    conic-gradient(from 0deg at bottom var(--b) left var(--b), var(--_g)) 0 100% / var(--_p),
+    conic-gradient(from -90deg at bottom var(--b) right var(--b), var(--_g)) 100% 100% / var(--_p);
+
+  /*Irrelevant code*/
+  width: 200px;
+  height: 100px;
+  box-sizing: border-box;
+  margin: 5px;
+  display: inline-flex;
+  font-size: 30px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.terms-condition-popup {
+  /* background: radial-gradient(90.61% 143.69% at 29.2% 35.35%, rgba(22, 45, 32, 0.2) 0%, rgba(110, 244, 123, 0.0447917) 77.08%, rgba(90, 213, 70, 0) 100%) warning: gradient uses a rotation that is not supported by CSS and may not behave as expected; */
+  background-image: url('/backgrounds/terms-condition-popup.png');
+  background: rgb(8, 14, 19);
+  background: linear-gradient(347deg, rgba(8, 14, 19, 1) 39%, rgba(11, 58, 36, 1) 96%);
+}
+
+.dashboard-card-bg {
+  background: radial-gradient(90.61% 143.69% at 29.2% 35.35%, rgba(22, 45, 32, 0.3) 0%, rgba(110, 244, 123, 0.0647917) 77.08%, rgba(90, 213, 70, 0) 100%)
+}
+
+.dashboard-sidebar-bg {
+  background: radial-gradient(90.61% 143.69% at 29.2% 35.35%, rgba(22, 45, 32, 0.2) 0%, rgba(110, 244, 123, 0.0447917) 77.08%, rgba(90, 213, 70, 0) 100%)
+    /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */
+  ;
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 10% 3.9%;
+    --chart-1: 173 58% 39%;
+    --chart-2: 12 76% 61%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-5: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-2: 340 75% 55%;
+  }
+}
+
+.blur-md {
+  filter: blur(4px);
+  transition: filter 0.3s ease-in-out;
+}
+
+.transition-transform {
+  transition: transform 0.3s ease-in-out;
+}
+
+.translate-x-0 {
+  transform: translateX(0);
+}
+
+.translate-x-full {
+  transform: translateX(100%);
+}
+
+.wheel-bg {
+  background-image: url('/backgrounds/wheel-bg.png');
+  background-size: cover;
+  /* Ensures the image covers the entire element */
+  background-position: center;
+  /* Centers the image within the element */
+  background-repeat: no-repeat;
+  /* Prevents the image from repeating */
+  position: relative;
+  /* Allows positioning of child elements */
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: black;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  /* border-radius: 10px; */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.back-bg {
+  background-image: url('/public/backgrounds/wheel-img.png');
+}
+
+.img {
+  -webkit-filter: drop-shadow(10px 10px 10px black);
+  filter: drop-shadow(15px 15px 20px black);
+  
+}
+
+
+/* Emerald */
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 142 86% 28%;
+    --primary-foreground: 356 29% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 45%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 142 86% 28%;
+    --chart-1: 139 65% 20%;
+    --chart-2: 140 74% 44%;
+    --chart-3: 142 88% 28%;
+    --chart-4: 137 55% 15%;
+    --chart-5: 141 40% 9%;
+  }
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 142 86% 28%;
+    --primary-foreground: 356 29% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 142 86% 28%;
+    --chart-1: 142 88% 28%;
+    --chart-2: 139 65% 20%;
+    --chart-3: 140 74% 24%;
+    --chart-4: 137 55% 15%;
+    --chart-5: 141 40% 9%;
+    }
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}

@@ -1,0 +1,63 @@
+.container {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 40%;
+    left: 75%;
+    border-radius: 0.6em;
+}
+
+@media (max-width: 768px) {
+    .container {
+        left: 50%;
+    }
+    
+.base,
+.scratch {
+    height: 300px;
+    width: 300px;
+}
+}
+
+.base,
+.scratch {
+    height: 350px;
+    width: 350px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    text-align: center;
+    cursor: grabbing;
+    border-radius: 2em;
+}
+
+.base {
+    background-image: url('/backgrounds/won-scratch-card.png'); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1.2em 2.5em rgba(16, 2, 96, 0.15);
+}
+
+.base h3 {
+    font-weight: 600;
+    font-size: 2em;
+    color: #17013b;
+}
+
+.base h4 {
+    font-weight: 400;
+    color: #746e7e;
+}
+
+.scratch {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: url("https://media.geeksforgeeks.org/wp-content/uploads/20231030101751/bx-eraser-icon.png"), auto;
+}
