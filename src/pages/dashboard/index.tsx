@@ -41,7 +41,8 @@ import MobileNav from "@/app/_components/common/MobileNav";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import TokensCount from "@/app/_components/dashboard/TokensCount";
+import TokensCount from "@/app/_components/common/TokensCount";
+import PaginatedUserList from "@/app/_components/common/PagedUserList";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function TokenChartTooltipContent(props: TooltipProps<any, any>) {
   const { payload, label } = props;
@@ -80,7 +81,7 @@ export default function Dashboard() {
   const router = useRouter();
   const { data: user } = api.user.getUserDetailsByUserId.useQuery();
   const {data:remainingToken } = api.global.getRemainingToken.useQuery();
-  const [userIds, setUserIds] = useState<string[]>([]);
+  const [userIds, setUserIds] = useState<string[]>(["1","2","3","4","5","6","7","8","9","10"]);
   const [amount, setAmount] = useState<number | null>(null);
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [screenWidth, setScreenWidth] = useState(0);
@@ -220,9 +221,13 @@ export default function Dashboard() {
     setSelectedUser(userId);
   };
 
-  const handleCoinTransfer = (amount: number) => {
+  const handleCoinTransfer = (amount: number, selectedUser: string, from: string) => {
     if (amount < 100) {
       alert("please transfer tokens more than 100");
+      return;
+    }
+    if(from == selectedUser){
+      alert("you can't transfer tokens to yourself");
       return;
     }
     if (selectedUser) {
@@ -298,7 +303,7 @@ export default function Dashboard() {
 
   if(screenWidth < 768){
     return <>
-      <MobileNav handleSearch={handleSearch} userId={userId} userIds={userIds} handleSelectUser={handleSelectUser} setAmount={setAmount} qrUserId={qrUserId} selectedUser={selectedUser} addNote={addNote} handleCoinTransfer={handleCoinTransfer} amount={amount} setAddNote={setAddNote} />
+      <MobileNav  handleSearch={handleSearch} userId={userId} userIds={userIds} handleSelectUser={handleSelectUser} setAmount={setAmount} qrUserId={qrUserId} selectedUser={selectedUser} addNote={addNote} handleCoinTransfer={handleCoinTransfer} amount={amount} setAddNote={setAddNote} setSelectedUser={setSelectedUser} />
       <div className='flex flex-col gap-8 p-4 mb-16'>
         <CarouselAds />
         <div className="grid grid-cols-2 gap-8">
@@ -560,15 +565,15 @@ export default function Dashboard() {
                       <DialogContent className="h-[90vh] w-screen border-0 bg-[#262626ED] p-10 text-white md:w-screen md:max-w-fit md:p-16">
                         <DialogHeader>
                           <DialogTitle className="flex justify-between text-[30px] text-white md:text-[30px]">
-                            <p>Transfer Tokens</p>
+                            <p className="">Transfer Tokens</p>
                             <ScanDialog handleSearch={handleSearch} />
                           </DialogTitle>
                           <div className="relative w-full">
                             <input
                               type="number"
-                              placeholder="Search by User ID"
+                              placeholder="Recent"
                               onChange={(e) => handleSearch(e.target.value)}
-                              className="w-full border-b-[1px] border-[#38F68F] bg-[#232323] px-4 py-1 pr-12 text-black  outline-none"
+                              className="w-full border-b-[1px] border-[#38F68F] bg-[#232323] px-4 py-1 pr-12 text-white outline-none"
                             />
                             <button className="rounded-[0 12px 12px 0] absolute right-0 top-0 h-full px-4 text-black">
                               <Image
@@ -581,7 +586,7 @@ export default function Dashboard() {
                           </div>
                           <DialogDescription className="flex w-full flex-col justify-center px-4 md:w-[100vh] md:flex-row">
                             <div className="flex w-full flex-col">
-                              {userIds.map((userId, index) => (
+                              {/* {userIds.map((userId, index) => (
                                 <div
                                   key={index}
                                   className="flex w-full flex-row items-center justify-between gap-4"
@@ -703,7 +708,8 @@ export default function Dashboard() {
                                     </DialogContent>
                                   </Dialog>
                                 </div>
-                              ))}
+                              ))} */}
+                              <PaginatedUserList  userIds={userIds} handleSelectUser={handleSelectUser} selectedUser={selectedUser || ""} amount={amount || 0} handleCoinTransfer={handleCoinTransfer} getAmountAfterTxnCost={getAmountAfterTxnCost} setAddNote={setAddNote} qrUserId={qrUserId} setAmount={setAmount} setSelectedUser={setSelectedUser} />
                             </div>
                           </DialogDescription>
                         </DialogHeader>
@@ -717,7 +723,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <Navbar />
+      <Navbar toggleSidebar={toggleSidebar} handleSearch={handleSearch} />
       <div
         className={`flex flex-col gap-8 p-10 pt-24 ${isSidebarOpen ? "blur-md" : ""}`}
       >
@@ -769,62 +775,63 @@ export default function Dashboard() {
                 {user?.balance.toLocaleString() ?? "0"}
               </p>
               <Dialog>
-                <DialogTrigger asChild>
-                  <button className="flex w-60 items-center justify-center gap-2 rounded-[10px] bg-[#38F68F] px-4 py-2 text-[12px] text-black md:w-40 md:text-[14px] lg:w-60">
-                    <Image
-                      width={18}
-                      height={18}
-                      src="/icons/black-generate-icon.svg"
-                      alt=""
-                      className="cursor-pointer"
-                    />
-                    <p>Redeem Your Code</p>
-                    <Image
-                      width={18}
-                      height={18}
-                      src="/icons/black-generate-icon.svg"
-                      alt=""
-                      className="cursor-pointer"
-                    />
-                  </button>
-                </DialogTrigger>
-                <DialogContent className="h-[60vh] border-0 bg-[#262626ED] text-white md:w-screen md:max-w-fit">
-                  <DialogTitle className="z-40 mt-8 flex w-full items-center justify-center text-center text-[20px] text-white md:mt-16 md:text-[36px]">
-                    Get extra tokens by using your premium promocode
-                  </DialogTitle>
-                  <Image
-                    width={121}
-                    height={127}
-                    src="/backgrounds/redeem-bg.png"
-                    alt=""
-                    className="absolute z-10 cursor-pointer"
-                  />
-                  <DialogDescription className="flex h-full w-full items-start justify-center px-4 md:w-[100vh]">
-                    <div className="item-center relative flex w-full justify-center text-[12px] md:w-1/2 md:text-[16px]">
-                      <input
-                        onChange={(e) => {
-                          setRedeemCode(e.target.value);
-                        }}
-                        className="focus-none w-full rounded-[10px] bg-[#2EC173] bg-opacity-[0.3] p-2 text-[#D8D8D8] outline-none md:p-3"
-                        placeholder="Enter Promo Code"
-                      />
-                      <button
-                        onClick={handleRedeemCode}
-                        className="absolute right-0 -ml-4 rounded-[10px] bg-[#38F68F] px-6 py-2 font-semibold text-black md:py-3"
-                      >
-                        Apply Now
-                      </button>
-                    </div>
-                  </DialogDescription>
-                  <Image
-                    width={150}
-                    height={200}
-                    src="/backgrounds/redeem-bg2.png"
-                    alt=""
-                    className="absolute bottom-0 right-0 z-10 cursor-pointer"
-                  />
-                </DialogContent>
-              </Dialog>
+  <DialogTrigger asChild>
+    <button className="flex w-60 items-center justify-center gap-2 rounded-[10px] bg-[#38F68F] px-4 py-2 text-[12px] text-black md:w-40 md:text-[14px] lg:w-60">
+      <Image
+        width={18}
+        height={18}
+        src="/icons/black-generate-icon.svg"
+        alt=""
+        className="cursor-pointer"
+      />
+      <p>Redeem Your Code</p>
+      <Image
+        width={18}
+        height={18}
+        src="/icons/black-generate-icon.svg"
+        alt=""
+        className="cursor-pointer"
+      />
+    </button>
+  </DialogTrigger>
+  <DialogContent className="h-[60vh] border-0 bg-[#262626ED] text-white md:w-screen md:max-w-fit overflow-hidden rounded-tr-[20px] rounded-bl-[20px]">
+    <DialogTitle className="z-40 mt-8 flex w-full items-center justify-center text-center text-[20px] text-white md:mt-16 md:text-[36px]">
+      Get extra tokens by using your premium promocode
+    </DialogTitle>
+    <Image
+      width={121}
+      height={127}
+      src="/backgrounds/redeem-bg.png"
+      alt=""
+      className="absolute z-10 cursor-pointer"
+    />
+    <DialogDescription className="flex h-full w-full items-start justify-center px-4 md:w-[100vh]">
+      <div className="item-center relative flex w-full justify-center text-[12px] md:w-1/2 md:text-[16px]">
+        <input
+          onChange={(e) => {
+            setRedeemCode(e.target.value);
+          }}
+          className="focus-none w-full rounded-[10px] bg-[#2EC173] bg-opacity-[0.3] p-2 text-[#D8D8D8] outline-none md:p-3"
+          placeholder="Enter Promo Code"
+        />
+        <button
+          onClick={handleRedeemCode}
+          className="absolute right-0 -ml-4 rounded-[10px] bg-[#38F68F] px-6 py-2 font-semibold text-black md:py-3"
+        >
+          Apply Now
+        </button>
+      </div>
+    </DialogDescription>
+    <Image
+      width={150}
+      height={200}
+      src="/backgrounds/redeem-bg2.png"
+      alt=""
+      className="absolute bottom-0 right-0 z-10 cursor-pointer"
+    />
+  </DialogContent>
+</Dialog>
+
             </div>
             <div className="dashboard-card-bg flex h-[210px] w-full flex-col rounded-xl border-[1px] border-[#2D2D2D] p-8 md:w-3/5">
               <div className="flex justify-between">
@@ -911,7 +918,7 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="dashboard-card-bg flex h-[210px] w-full flex-col items-center rounded-xl border-[1px] border-[#2D2D2D] p-8 md:w-1/3">
-            <p>Your QR Code</p>
+            {/* <p>Your QR Code</p>
             {qrUserId && (
               <Image
                 src={`https://qrcode.tec-it.com/API/QRCode?data=${qrUserId}&color=000000&istransparent=false&size=small&quietzone=1&dpi=300`}
@@ -919,7 +926,8 @@ export default function Dashboard() {
                 width={153}
                 height={153}
               />
-            )}
+            )} */}
+            <TokensCount burnt={remainingToken?.burnt ?? 0} remainingToken={remainingToken?.remainingToken ?? 0} />
           </div>
         </div>
         <div className="flex flex-col gap-8 text-white md:flex-row mt-12">
@@ -979,13 +987,13 @@ export default function Dashboard() {
                         {txn?.pages[currentPage - 1]?.transactions?.map(
                           (transaction, index) => (
                             <tr key={index}>
-                              <td className="whitespace-nowrap px-6 py-4 text-[16px] font-medium text-white">
+                              <td className={`whitespace-nowrap px-6 py-4 text-[16px] font-medium  ${userName(transaction.from).toLocaleLowerCase() === 'tokenwale'? 'text-[#38F68F]' : 'text-white'}`}>
                                 {userName(transaction.from)}
                               </td>
-                              <td className="whitespace-nowrap px-6 py-4 text-[16px] font-medium text-white">
+                              <td className={`whitespace-nowrap px-6 py-4 text-[16px] font-medium ${userName(transaction.to).toLocaleLowerCase() === 'burnt'? 'text-red-500' : 'text-white'}`}>
                                 {userName(transaction.to)}
                               </td>
-                              <td className="whitespace-nowrap px-6 py-4 text-[16px] text-white">
+                              <td className={`whitespace-nowrap px-6 py-4 text-[16px] ${userName(transaction.from).toLocaleLowerCase() === 'tokenwale'? 'text-[#38F68F]' : userName(transaction.to).toLocaleLowerCase() === 'burnt'? 'text-red-500' : 'text-white'} `}>
                                 {transaction.amount}
                               </td>
                               <td className="whitespace-nowrap px-6 py-4 text-end text-[16px] text-white">
@@ -1021,16 +1029,16 @@ export default function Dashboard() {
                       </DialogTrigger>
                       <DialogContent className="h-[90vh] w-screen border-0 bg-[#262626ED] p-10 text-white md:w-screen md:max-w-fit md:p-16">
                         <DialogHeader>
-                          <DialogTitle className="flex justify-between text-[30px] text-white md:text-[30px]">
+                          <DialogTitle className="flex justify-between text-[30px] text-white md:text-[30px] mb-3">
                             <p>Transfer Tokens</p>
                             <ScanDialog handleSearch={handleSearch} />
                           </DialogTitle>
                           <div className="relative w-full">
                             <input
                               type="number"
-                              placeholder="Search by User ID"
+                              placeholder="Recent"
                               onChange={(e) => handleSearch(e.target.value)}
-                              className="w-full border-b-[1px] border-[#38F68F] bg-[#232323] px-4 py-1 pr-12 text-black  outline-none"
+                              className="w-full border-b-[1px] border-[#38F68F] bg-[#232323] px-4 py-1 pr-12  text-white outline-none"
                             />
                             <button className="rounded-[0 12px 12px 0] absolute right-0 top-0 h-full px-4 text-black">
                               <Image
@@ -1043,7 +1051,7 @@ export default function Dashboard() {
                           </div>
                           <DialogDescription className="flex w-full flex-col justify-center px-4 md:w-[100vh] md:flex-row">
                             <div className="flex w-full flex-col">
-                              {userIds.map((userId, index) => (
+                              {/* {userIds.map((userId, index) => (
                                 <div
                                   key={index}
                                   className="flex w-full flex-row items-center justify-between gap-4"
@@ -1165,7 +1173,8 @@ export default function Dashboard() {
                                     </DialogContent>
                                   </Dialog>
                                 </div>
-                              ))}
+                              ))} */}
+                              <PaginatedUserList   userIds={userIds} handleSelectUser={handleSelectUser} handleCoinTransfer={handleCoinTransfer} getAmountAfterTxnCost={getAmountAfterTxnCost} setAddNote={setAddNote} qrUserId={qrUserId} selectedUser={selectedUser || ""} amount={amount || 0 } setAmount={setAmount} setSelectedUser={setSelectedUser} />
                             </div>
                           </DialogDescription>
                         </DialogHeader>
@@ -1189,6 +1198,8 @@ export default function Dashboard() {
                             </div>
                             <div className="mt-12 flex w-full items-center justify-center text-[40px] font-bold text-[#38F68F] md:mt-20">
                               <p>{amount ?? 0} Tokens!</p>
+                              <p className="text-2xl">Transfered to {userName(selectedUser ?? "")} successfully.</p>
+                              <p className="text-[16px]">{new Date().toLocaleString()}</p>
                             </div>
                           </DialogDescription>
                         </DialogHeader>
@@ -1210,8 +1221,10 @@ export default function Dashboard() {
                                 alt="img"
                               />
                             </div>
-                            <div className="mt-12 flex w-full items-center justify-center text-[40px] font-bold text-[#38F68F] md:mt-20">
+                            <div className="mt-12 flex flex-col w-full items-center justify-center text-[40px] font-bold text-[#38F68F] md:mt-20">
                               <p>{amount ?? 0} Tokens!</p>
+                              <p className="text-2xl font-normal mt-4 text-center text-white">Transfered to {userName(selectedUser ?? "")}</p>
+                              <p className="text-[16px] mt-3 text-center text-white">{new Date().toLocaleString()}</p>
                             </div>
                           </DialogDescription>
                         </DialogHeader>

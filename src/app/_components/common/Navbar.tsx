@@ -4,8 +4,10 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 import Link from 'next/link'
+import ScanDialog from "./QrScannerPopup";
+import { ScanQrCode } from "lucide-react";
 
-export const Navbar = () => {
+export const Navbar = ({ toggleSidebar,handleSearch }: { toggleSidebar?: () => void, handleSearch?: (userId: string) => void }) => {
   const { status } = useSession();
   const router = useRouter();
 
@@ -16,6 +18,7 @@ export const Navbar = () => {
   return (
     <nav className='flex flex-row h-[72px] w-full items-center justify-between text-white bg-black pl-4 sm:pl-8 md:pl-12 fixed z-20'>
       <div className='flex flex-row justify-center items-center gap-2'>
+        
       <Link href="/">
         <img 
           onClick={() => { router.push('/') }} 
@@ -32,7 +35,21 @@ export const Navbar = () => {
         </p>
         </Link>
       </div>
+
       <div className="flex flex-row items-center justify-center gap-2 sm:gap-8">
+      {
+          (status == 'authenticated' && toggleSidebar) &&
+            
+            <div className='flex flex-row items-center h-full bg-[#38F68F] px-4 sm:px-6 md:px-8 py-7 sm:py-6 cursor-pointer hover:bg-[#2dcf70] transition-colors duration-200'>
+              <button 
+                className='text-black font-semibold tracking-widest text-xs sm:text-sm md:text-base' 
+                onClick={toggleSidebar}
+              >
+                MY WALLET
+              </button>
+              <img src="/logos/arrow.svg" alt="Arrow" className='h-4 sm:h-5' />
+            </div>
+        }
         <span className="flex gap-2 sm:gap-8">
           <button className="text-[10px] font-semibold tracking-widest text-white sm:text-base hover:text-gray-300 transition-colors duration-200">
             REWARDS
@@ -46,7 +63,7 @@ export const Navbar = () => {
         </span>
         {
           (status == 'authenticated') ?
-            <div className="pr-4">
+            <div className="pr-4 flex gap-2 items-center">
               <Image 
                 width={50} 
                 height={50} 
@@ -55,6 +72,7 @@ export const Navbar = () => {
                 className="cursor-pointer hover:scale-105 transition-transform duration-200"
                 onClick={() => { router.push('/dashboard') }}
               />
+              {handleSearch && <ScanDialog  handleSearch={handleSearch} scanIcon={<ScanQrCode  color='#38F68F' size={24} />} />}  
             </div> :
             <Link href="/auth/new-wallet">
             <div className='flex flex-row items-center h-full bg-[#38F68F] px-4 sm:px-6 md:px-8 py-7 sm:py-6 cursor-pointer hover:bg-[#2dcf70] transition-colors duration-200'>

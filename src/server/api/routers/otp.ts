@@ -34,6 +34,7 @@ export const otpRouter = createTRPCRouter({
         userId: ctx.session.user.id,
         type: "EMAIL",
         otp,
+        createdAt: new Date(),
       });
 
       return { success: true };
@@ -55,6 +56,7 @@ export const otpRouter = createTRPCRouter({
         userId: ctx.session.user.id,
         type: "PHONE",
         otp,
+        createdAt: new Date(),
       });
       return { success: true };
     }),
@@ -69,6 +71,7 @@ export const otpRouter = createTRPCRouter({
             Filter.where("type", "==", input.type),
           ),
         )
+        .orderBy("createdAt", "desc")
         .limit(1)
         .get();
       if (user.empty)

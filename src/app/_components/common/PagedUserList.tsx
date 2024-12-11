@@ -1,75 +1,54 @@
-import { Dialog, DialogTitle, DialogHeader, DialogContent, DialogDescription, DialogTrigger } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { ScanQrCode, Search } from 'lucide-react'
-import Image from 'next/image'
-import React, { ChangeEvent, useState } from 'react'
-import ScanDialog from './QrScannerPopup'
-import { getAmountAfterTxnCost, userName } from '@/utils/random'
-import PaginatedUserList from './PagedUserList'
+import { Dialog, DialogDescription, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
+import { userName } from "@/utils/random";
+import { ChangeEvent, useState } from "react";
 
-  const MobileNav = ({handleSearch, userId, userIds, handleSelectUser, setAmount, qrUserId, selectedUser, addNote, handleCoinTransfer, amount, setAddNote, setSelectedUser}: {handleSearch:  (userId: string) => void, userId: string, userIds: string[], handleSelectUser: (userId: string) => void, setAmount: (amount: number) => void, qrUserId: string, selectedUser: string | null, addNote: string, handleCoinTransfer: (amount: number, selectedUser: string, from: string) => void, amount: number | null, setAddNote: (note: string) => void, setSelectedUser: (userId: string) => void}) => {
-  
+
+const PaginatedUserList = ({userIds, handleSelectUser, handleCoinTransfer, getAmountAfterTxnCost, setAddNote, qrUserId, selectedUser, amount, setAmount, setSelectedUser}: {userIds: string[], handleSelectUser: (userId: string) => void, handleCoinTransfer: (amount: number, selectedUser: string, from: string  ) => void, getAmountAfterTxnCost: (amount: number) => number, setAddNote: (note: string) => void, qrUserId: string, selectedUser: string, amount: number, setAmount: (amount: number) => void, setSelectedUser: (userId: string) => void}) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rows, setRows] = useState(5);
+
+
+  // Calculate the indices for slicing
+  const startIndex = (currentPage - 1) * rows;
+  const endIndex = startIndex + rows;
+
+  // Slice the array for the current page
+  const paginatedUsers = userIds.slice(startIndex, endIndex);
+
+  // Calculate total pages
+const totalPages = Math.ceil(userIds.length / rows);
+
+  // Navigate to the previous page
+  const handlePrevPage = () => {
+    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+  };
+
+  // Navigate to the next page
+  const handleNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
+  };
+
   return (
-    <div className='flex flex-row items-center justify-between p-4'>
-        <Image
-            src="/logos/tokenwale-logo.svg"
-            alt="Logo"
-            width={43}
-            height={43}
-        />
-        <div className='flex flex-row items-center justify-between gap-4'>
-            <Dialog
-                      onOpenChange={(e) =>
-                        e === false ? handleSearch("") : null
-                      }
-                    >
-                      <DialogTrigger asChild>
-                      <Search onClick={() => handleSearch(userId)} color='white' size={24} />
-               
-                      </DialogTrigger>
-                      <DialogContent className="h-[90vh] w-screen border-0 bg-[#262626ED] p-10 text-white md:w-screen md:max-w-fit md:p-16">
-                        <DialogHeader>
-                          <DialogTitle className="flex justify-between text-[30px] text-white md:text-[30px]">
-                            <p>Transfer Tokens</p>
-                            <ScanDialog handleSearch={handleSearch} />
-                          </DialogTitle>
-                          <div className="relative w-full">
-                            <input
-                              type="number"
-                              placeholder="Recent"
-                              onChange={(e) => handleSearch(e.target.value)}
-                              className="w-full border-b-[1px] border-[#38F68F] bg-[#232323] px-4 py-1 pr-12 text-black  outline-none"
-                            />
-                            <button className="rounded-[0 12px 12px 0] absolute right-0 top-0 h-full px-4 text-black">
-                              <Image
-                                alt=""
-                                height={18}
-                                width={18}
-                                src="/icons/search-icon.svg"
-                              />
-                            </button>
-                          </div>
-                          <DialogDescription className="flex w-full flex-col justify-center px-4 md:w-[100vh] md:flex-row">
-                            <div className="flex w-full flex-col">
-                              {/* {userIds.map((userId, index) => (
-                                <div
-                                  key={index}
-                                  className="flex w-full flex-row items-center justify-between gap-4"
-                                >
-                                  <span className="mt-4 flex w-full items-center gap-2 rounded-[12px] py-3 text-start text-white">
-                                    <p className="h-[2rem] w-[2rem] rounded-full bg-white text-[12px] md:text-[18px]"></p>
-                                    {userName(userId)}
-                                  </span>
-                                  <Dialog>
-                                    <DialogTrigger asChild>
-                                      <button
-                                        className="mt-4 w-full max-w-[250px] rounded-[10px] bg-[#2DC574] py-3 text-center text-[18px] text-black md:w-[250px] md:text-[20px]"
-                                        onClick={() => handleSelectUser(userId)}
-                                      >
-                                        Transfer now
-                                      </button>
-                                    </DialogTrigger>
-                                    <DialogContent className="h-[90vh] w-full border-0 bg-[#262626ED] text-white md:w-screen md:max-w-fit">
+    <div>
+      {paginatedUsers.map((userId, index) => (
+        <div
+          key={index}
+          className="flex w-full flex-row items-center justify-between gap-4"
+        >
+          <span className="mt-2 flex w-full items-center gap-2 rounded-[12px] py-3 text-start text-white">
+            <p className="h-[2rem] w-[2rem] rounded-full bg-white text-[12px] md:text-[18px]"></p>
+            {userName(userId)}
+          </span>
+          <Dialog>
+            <DialogTrigger asChild>
+              <button
+                className="mt-4 max-w-[250px] rounded-[10px] bg-[#2DC574] py-3 text-center text-sm text-black w-[150px] md:text-md"
+                onClick={() => handleSelectUser(userId)}
+              >
+                Transfer now
+              </button>
+            </DialogTrigger>
+            <DialogContent className="h-[90vh] w-full border-0 bg-[#262626ED] text-white md:w-screen md:max-w-fit">
                                       <DialogHeader>
                                         <DialogDescription className="flex max-h-[80vh] w-full flex-col justify-center overflow-y-auto px-4 py-40 md:max-h-full md:w-[100vh] md:py-0">
                                           <div className="mt-10 flex flex-row items-center justify-center gap-4 md:mt-20">
@@ -162,7 +141,7 @@ import PaginatedUserList from './PagedUserList'
                                             <button
                                               className="mt-8 w-full max-w-[300px] rounded-[10px] bg-[#38F68F] py-3 text-center text-[24px] font-[600] text-black md:mt-12 md:text-[28px]"
                                               onClick={() =>
-                                                handleCoinTransfer(amount ?? 0)
+                                                handleCoinTransfer(amount ?? 0, selectedUser ?? "", qrUserId ?? "")
                                               }
                                             >
                                               Transfer Now
@@ -171,20 +150,77 @@ import PaginatedUserList from './PagedUserList'
                                         </DialogDescription>
                                       </DialogHeader>
                                     </DialogContent>
-                                  </Dialog>
-                                </div>
-                              ))} */}
-                              <PaginatedUserList   userIds={userIds} handleSelectUser={handleSelectUser} handleCoinTransfer={handleCoinTransfer} getAmountAfterTxnCost={getAmountAfterTxnCost} setAddNote={setAddNote} qrUserId={qrUserId} selectedUser={selectedUser || ""} amount={amount || 0 } setAmount={setAmount} setSelectedUser={setSelectedUser} />
-                            </div>
-                          </DialogDescription>
-                        </DialogHeader>
-                      </DialogContent>
-            </Dialog>
-
-           <ScanDialog  handleSearch={handleSearch} scanIcon={<ScanQrCode  color='white' size={24} />} />
+          </Dialog>
         </div>
+      ))}
+      {/* Pagination Controls */}
+      {/* <div className="mt-8 flex items-center justify-center gap-4">
+        <button
+          className="rounded bg-gray-400 px-4 py-2 text-white disabled:opacity-50"
+          onClick={handlePrevPage}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <span className="text-white">
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          className="rounded bg-gray-400 px-4 py-2 text-white disabled:opacity-50"
+          onClick={handleNextPage}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      </div> */}
+        <div className="flex w-full md:flex-row md:justify-between mb-18">
+                    <div className="flex w-full items-center gap-2 text-white px-3">
+                      <label>Show rows:</label>
+                      <select
+                        name="page_number"
+                        className="rounded-[10px] border-none bg-[#38F68F] bg-opacity-25 px-4 py-1 text-white outline-none"
+                        onChange={(e) => {
+                          setCurrentPage(1);
+                          setRows(e.target.value ? Number(e.target.value) : 10);
+                        }}
+                      >
+                        {[2,3,4,5,6].map((number) => (
+                          <option
+                            key={number}
+                            className="text-black"
+                            value={number}
+                          >
+                            {number}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="mt-4 flex w-1/3 items-center justify-between">
+                      <button
+                        onClick={handlePrevPage}
+                        disabled={currentPage === 1}
+                        className="cursor-pointer rounded px-4 py-2 text-white hover:bg-gray-800"
+                      >
+                        &lt;
+                      </button>
+                      <div className="flex gap-2">
+                        <button
+                          className={`rounded px-4 py-2 text-green-500`}
+                          disabled={true}
+                        >
+                          {currentPage}
+                        </button>
+                      </div>
+                      <button
+                        onClick={handleNextPage}
+                        className="cursor-pointer rounded px-4 py-2 text-white hover:bg-gray-800"
+                      >
+                        &gt;
+                      </button>
+                    </div>
+                  </div>
     </div>
-  )
-}
+  );
+};
 
-export default MobileNav
+export default PaginatedUserList;

@@ -269,11 +269,11 @@ const index = () => {
               height={1000}
               width={1000}
               src={"/backgrounds/red-dot.png"}
-              className={`z-90 absolute top-[42%] md:top-[47%] md:h-[1.8rem] md:w-[1.8rem] md:left-[48%] ${styles.backgroundImage}`}
+              className={`z-90 absolute top-[42%] md:top-[47%] h-[10rem] w-[10rem] md:h-[1.8rem] md:w-[1.8rem] md:left-[48%] ${styles.backgroundImage}`}
               // style={{ zIndex: "999 !important" }}
               alt={""}
             />
-            <canvas ref={canvasRef} className={`w-[100%] h-[100%] ${styles.spinWheel}`}></canvas>
+            <canvas ref={canvasRef} className={`h-[10rem] w-[10rem] md:h-[1.8rem] md:w-[1.8rem] ${styles.spinWheel}`}></canvas>
             <div className={styles.stopper}></div>
           </div>
         </div>
