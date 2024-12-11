@@ -41,7 +41,7 @@ import MobileNav from "@/app/_components/common/MobileNav";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import TokensCount from "@/app/_components/common/TokensCount";
+import TokensCount from "@/app/_components/dashboard/TokensCount";
 import PaginatedUserList from "@/app/_components/common/PagedUserList";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function TokenChartTooltipContent(props: TooltipProps<any, any>) {
